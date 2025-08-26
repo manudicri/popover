@@ -14,6 +14,7 @@ final class PopoverContext extends SingleChildRenderObjectWidget {
   final PopoverDirection? direction;
   final double? arrowWidth;
   final double arrowHeight;
+  final Curve curve;
 
   const PopoverContext({
     required this.transition,
@@ -26,6 +27,7 @@ final class PopoverContext extends SingleChildRenderObjectWidget {
     this.radius,
     this.direction,
     this.arrowWidth,
+    this.curve = Curves.easeOut,
   });
 
   @override
@@ -51,7 +53,7 @@ final class PopoverContext extends SingleChildRenderObjectWidget {
       ..attachRect = attachRect
       ..color = backgroundColor
       ..boxShadow = boxShadow
-      ..scale = transition == PopoverTransition.scale ? animation.value : 1.0
+      ..scale = transition == PopoverTransition.scale ? curve.transform(animation.value) : 1.0
       ..direction = direction
       ..radius = radius
       ..arrowWidth = arrowWidth

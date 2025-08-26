@@ -70,10 +70,15 @@ class Button extends StatelessWidget {
         onTap: () {
           showPopover(
             context: context,
+            barrierDismissible: true,
+            barrierColor: Colors.transparent,
             bodyBuilder: (context) => const ListItems(),
             onPop: () => print('Popover was popped!'),
             direction: PopoverDirection.bottom,
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.red,
+            transitionDuration: Durations.long1,
+            transition: PopoverTransition.scale,
+            curve: Curves.easeInOut,
             width: 200,
             height: 400,
             arrowHeight: 15,

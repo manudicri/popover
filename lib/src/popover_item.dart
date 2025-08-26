@@ -21,6 +21,7 @@ class PopoverItem extends StatefulWidget {
   final double contentDyOffset;
   final double contentDxOffset;
   final PopoverTransition transition;
+  final Curve curve;
 
   const PopoverItem({
     required this.child,
@@ -29,6 +30,7 @@ class PopoverItem extends StatefulWidget {
     required this.animation,
     required this.arrowHeight,
     this.backgroundColor,
+    this.curve = Curves.easeOut,
     this.direction,
     this.radius,
     this.boxShadow,
@@ -71,6 +73,7 @@ class _PopoverItemState extends State<PopoverItem> {
                 arrowWidth: widget.arrowWidth,
                 arrowHeight: widget.arrowHeight,
                 transition: widget.transition,
+                curve: widget.curve,
                 child: child,
               );
             },
@@ -106,23 +109,14 @@ class _PopoverItemState extends State<PopoverItem> {
 
     if (widget.constraints != null) {
       constraints = constraints.copyWith(
-        minWidth: widget.constraints!.minWidth.isFinite
-            ? widget.constraints!.minWidth
-            : null,
-        minHeight: widget.constraints!.minHeight.isFinite
-            ? widget.constraints!.minHeight
-            : null,
-        maxWidth: widget.constraints!.maxWidth.isFinite
-            ? widget.constraints!.maxWidth
-            : null,
-        maxHeight: widget.constraints!.maxHeight.isFinite
-            ? widget.constraints!.maxHeight
-            : null,
+        minWidth: widget.constraints!.minWidth.isFinite ? widget.constraints!.minWidth : null,
+        minHeight: widget.constraints!.minHeight.isFinite ? widget.constraints!.minHeight : null,
+        maxWidth: widget.constraints!.maxWidth.isFinite ? widget.constraints!.maxWidth : null,
+        maxHeight: widget.constraints!.maxHeight.isFinite ? widget.constraints!.maxHeight : null,
       );
     }
 
-    if (widget.direction == PopoverDirection.top ||
-        widget.direction == PopoverDirection.bottom) {
+    if (widget.direction == PopoverDirection.top || widget.direction == PopoverDirection.bottom) {
       final maxHeight = constraints.maxHeight + widget.arrowHeight;
       constraints = constraints.copyWith(maxHeight: maxHeight);
     } else {

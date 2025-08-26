@@ -84,6 +84,7 @@ Future<T?> showPopover<T extends Object?>({
   required WidgetBuilder bodyBuilder,
   PopoverDirection direction = PopoverDirection.bottom,
   PopoverTransition transition = PopoverTransition.scale,
+  Curve curve = Curves.easeOut,
   Color backgroundColor = const Color(0x8FFFFFFFF),
   Color barrierColor = const Color(0x80000000),
   Duration transitionDuration = const Duration(milliseconds: 200),
@@ -117,8 +118,7 @@ Future<T?> showPopover<T extends Object?>({
   bool allowClicksOnBackground = false,
 }) {
   constraints = (width != null || height != null)
-      ? constraints?.tighten(width: width, height: height) ??
-          BoxConstraints.tightFor(width: width, height: height)
+      ? constraints?.tighten(width: width, height: height) ?? BoxConstraints.tightFor(width: width, height: height)
       : constraints;
 
   return Navigator.of(context, rootNavigator: true).push<T>(
@@ -130,6 +130,7 @@ Future<T?> showPopover<T extends Object?>({
           child: PopoverItem(
             transition: transition,
             child: Builder(builder: bodyBuilder),
+            curve: curve,
             context: context,
             backgroundColor: backgroundColor,
             direction: direction,
@@ -148,8 +149,7 @@ Future<T?> showPopover<T extends Object?>({
         );
       },
       barrierDismissible: barrierDismissible,
-      barrierLabel: barrierLabel ??
-          MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierLabel: barrierLabel ?? MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: barrierColor,
       transitionDuration: transitionDuration,
       settings: routeSettings,
