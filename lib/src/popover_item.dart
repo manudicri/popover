@@ -23,6 +23,7 @@ class PopoverItem extends StatefulWidget {
   final PopoverTransition transition;
   final Curve curve;
   final Curve? reverseCurve;
+  final double borderRadius;
 
   const PopoverItem({
     required this.child,
@@ -42,6 +43,7 @@ class PopoverItem extends StatefulWidget {
     this.arrowDyOffset = 0,
     this.contentDyOffset = 0,
     this.contentDxOffset = 0,
+    this.borderRadius = 5,
     super.key,
   });
 
@@ -80,9 +82,12 @@ class _PopoverItemState extends State<PopoverItem> {
                 child: child,
               );
             },
-            child: Material(
-              child: widget.child,
-              color: widget.backgroundColor,
+            child: ClipRSuperellipse(
+              borderRadius: BorderRadius.circular(widget.borderRadius),
+              child: Material(
+                child: widget.child,
+                color: widget.backgroundColor,
+              ),
             ),
           ),
         )
