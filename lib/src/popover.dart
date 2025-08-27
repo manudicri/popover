@@ -85,9 +85,11 @@ Future<T?> showPopover<T extends Object?>({
   PopoverDirection direction = PopoverDirection.bottom,
   PopoverTransition transition = PopoverTransition.scale,
   Curve curve = Curves.easeOut,
+  Curve reverseCurve = Curves.easeOut,
   Color backgroundColor = const Color(0x8FFFFFFFF),
   Color barrierColor = const Color(0x80000000),
   Duration transitionDuration = const Duration(milliseconds: 200),
+  Duration reverseTransitionDuration = const Duration(milliseconds: 200),
   double radius = 8,
   List<BoxShadow> shadow = const [
     BoxShadow(
@@ -131,6 +133,7 @@ Future<T?> showPopover<T extends Object?>({
             transition: transition,
             child: Builder(builder: bodyBuilder),
             curve: curve,
+            reverseCurve: reverseCurve,
             context: context,
             backgroundColor: backgroundColor,
             direction: direction,
@@ -152,6 +155,7 @@ Future<T?> showPopover<T extends Object?>({
       barrierLabel: barrierLabel ?? MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: barrierColor,
       transitionDuration: transitionDuration,
+      reverseTransitionDuration: reverseTransitionDuration,
       settings: routeSettings,
       transitionBuilder: (builderContext, animation, _, child) {
         return popoverTransitionBuilder == null

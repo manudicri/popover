@@ -22,6 +22,7 @@ class PopoverItem extends StatefulWidget {
   final double contentDxOffset;
   final PopoverTransition transition;
   final Curve curve;
+  final Curve? reverseCurve;
 
   const PopoverItem({
     required this.child,
@@ -31,6 +32,7 @@ class PopoverItem extends StatefulWidget {
     required this.arrowHeight,
     this.backgroundColor,
     this.curve = Curves.easeOut,
+    this.reverseCurve,
     this.direction,
     this.radius,
     this.boxShadow,
@@ -74,6 +76,7 @@ class _PopoverItemState extends State<PopoverItem> {
                 arrowHeight: widget.arrowHeight,
                 transition: widget.transition,
                 curve: widget.curve,
+                reverseCurve: widget.reverseCurve,
                 child: child,
               );
             },

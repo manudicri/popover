@@ -77,6 +77,7 @@ class Button extends StatelessWidget {
             direction: PopoverDirection.bottom,
             backgroundColor: Colors.red,
             transitionDuration: Durations.long1,
+            reverseTransitionDuration: Durations.short1,
             transition: PopoverTransition.scale,
             curve: Curves.easeInOut,
             width: 200,

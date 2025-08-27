@@ -15,6 +15,7 @@ final class PopoverContext extends SingleChildRenderObjectWidget {
   final double? arrowWidth;
   final double arrowHeight;
   final Curve curve;
+  final Curve? reverseCurve;
 
   const PopoverContext({
     required this.transition,
@@ -28,6 +29,7 @@ final class PopoverContext extends SingleChildRenderObjectWidget {
     this.direction,
     this.arrowWidth,
     this.curve = Curves.easeOut,
+    this.reverseCurve,
   });
 
   @override
@@ -49,11 +51,20 @@ final class PopoverContext extends SingleChildRenderObjectWidget {
     BuildContext context,
     PopoverRenderShiftedBox renderObject,
   ) {
+    if (transition == PopoverTransition.scale) {
+      if (animation.status == AnimationStatus.reverse && reverseCurve != null) {
+        renderObject.scale = reverseCurve!.transform(animation.value);
+      } else {
+        renderObject.scale = curve.transform(animation.value);
+      }
+    } else {
+      renderObject.scale = 1.0;
+    }
+
     renderObject
       ..attachRect = attachRect
       ..color = backgroundColor
       ..boxShadow = boxShadow
-      ..scale = transition == PopoverTransition.scale ? curve.transform(animation.value) : 1.0
       ..direction = direction
       ..radius = radius
       ..arrowWidth = arrowWidth
