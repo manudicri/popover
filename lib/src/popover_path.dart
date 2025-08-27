@@ -15,6 +15,9 @@ final class PopoverPath {
     final path = Path();
 
     if (arrowRect != null) {
+      if (arrowRect.bottom > bodyRect.top) {
+        direction = PopoverDirection.top;
+      }
       if (direction == PopoverDirection.top) {
         _drawTopElement(path, arrowRect, bodyRect);
       } else if (direction == PopoverDirection.right) {
@@ -30,6 +33,36 @@ final class PopoverPath {
       path.close();
       return path;
     }
+  }
+
+  Path drawArrow(
+    PopoverDirection? direction,
+    Rect? arrowRect,
+  ) {
+    final path = Path();
+
+    if (arrowRect != null) {
+      if (direction == PopoverDirection.top) {
+        _drawTopElementArrow(path, arrowRect);
+      } else if (direction == PopoverDirection.right) {
+        throw UnimplementedError();
+      } else if (direction == PopoverDirection.left) {
+        throw UnimplementedError();
+      } else {
+        _drawBottomElementArrow(path, arrowRect);
+      }
+      path.close();
+      return path;
+    } else {
+      path.close();
+      return path;
+    }
+  }
+
+  void _drawBottomElementArrow(Path path, Rect arrowRect) {
+    path.moveTo(arrowRect.left + arrowRect.width / 2, arrowRect.top);
+    path.lineTo(arrowRect.left - arrowRect.width / 2, arrowRect.bottom - (arrowRect.top - arrowRect.bottom));
+    path.lineTo(arrowRect.right + arrowRect.width / 2, arrowRect.bottom - (arrowRect.top - arrowRect.bottom));
   }
 
   void _drawBottomElement(Path path, Rect arrowRect, Rect bodyRect) {
@@ -156,6 +189,12 @@ final class PopoverPath {
       bodyRect.top + radius,
       1,
     );
+  }
+
+  void _drawTopElementArrow(Path path, Rect arrowRect) {
+    path.moveTo(arrowRect.left + arrowRect.width / 2, arrowRect.bottom);
+    path.lineTo(arrowRect.left - arrowRect.width / 2, arrowRect.top - arrowRect.height);
+    path.lineTo(arrowRect.right + arrowRect.width / 2, arrowRect.top - arrowRect.height);
   }
 
   void _drawTopElement(Path path, Rect arrowRect, Rect bodyRect) {

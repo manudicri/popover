@@ -1,3 +1,4 @@
+import 'package:elegant_spring_animation/elegant_spring_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:popover/popover.dart';
 
@@ -75,11 +76,13 @@ class Button extends StatelessWidget {
             bodyBuilder: (context) => const ListItems(),
             onPop: () => print('Popover was popped!'),
             direction: PopoverDirection.bottom,
-            backgroundColor: Colors.red,
-            transitionDuration: Durations.long1,
-            reverseTransitionDuration: Durations.short1,
+            popoverTransitionBuilder: (animation, child) => child,
+            backgroundColor: Colors.transparent,
+            transitionDuration: const Duration(seconds: 2),
+            curve: ElegantSpring.maximumBounce,
+            reverseTransitionDuration: Durations.long1,
+            reverseCurve: Curves.easeOut,
             transition: PopoverTransition.scale,
-            curve: Curves.easeInOut,
             width: 200,
             height: 400,
             arrowHeight: 15,
