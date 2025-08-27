@@ -73,18 +73,22 @@ class Button extends StatelessWidget {
             context: context,
             barrierDismissible: true,
             barrierColor: Colors.transparent,
-            bodyBuilder: (context) => const ListItems(),
+            bodyBuilder: (context) {
+              debugPrint("bodyBuilder");
+              return const ListItems();
+              return Container(color: Colors.red, child: const Text("ciao"));
+            },
             onPop: () => print('Popover was popped!'),
             direction: PopoverDirection.bottom,
             popoverTransitionBuilder: (animation, child) => child,
-            backgroundColor: Colors.transparent,
+            backgroundColor: Colors.white,
             transitionDuration: const Duration(seconds: 2),
             curve: ElegantSpring.maximumBounce,
             reverseTransitionDuration: Durations.long1,
             reverseCurve: Curves.easeOut,
             transition: PopoverTransition.scale,
             width: 200,
-            height: 400,
+            height: 300,
             arrowHeight: 15,
             arrowWidth: 30,
           );
