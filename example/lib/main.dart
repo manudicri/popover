@@ -88,7 +88,6 @@ class Button extends StatelessWidget {
             reverseCurve: Curves.easeOut,
             transition: PopoverTransition.scale,
             width: 200,
-            height: 300,
             arrowHeight: 15,
             arrowWidth: 30,
           );
@@ -104,8 +103,9 @@ class ListItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: ListView(
+        shrinkWrap: true,
         padding: const EdgeInsets.all(8),
         children: [
           InkWell(
@@ -147,6 +147,30 @@ class ListItems extends StatelessWidget {
             height: 50,
             color: Colors.amber[500],
             child: const Center(child: Text('Entry E')),
+          ),
+          const Divider(),
+          Container(
+            height: 50,
+            color: Colors.amber[600],
+            child: const Center(child: Text('Entry F')),
+          ),
+          const Divider(),
+          Container(
+            height: 50,
+            color: Colors.amber[600],
+            child: const Center(child: Text('Entry F')),
+          ),
+          const Divider(),
+          Container(
+            height: 50,
+            color: Colors.amber[600],
+            child: const Center(child: Text('Entry F')),
+          ),
+          const Divider(),
+          Container(
+            height: 50,
+            color: Colors.amber[600],
+            child: const Center(child: Text('Entry F')),
           ),
           const Divider(),
           Container(

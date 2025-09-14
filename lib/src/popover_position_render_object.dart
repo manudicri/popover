@@ -50,8 +50,7 @@ final class PopoverPositionRenderObject extends RenderShiftedBox {
       direction,
     );
 
-    if (_direction == PopoverDirection.top ||
-        _direction == PopoverDirection.bottom) {
+    if (_direction == PopoverDirection.top || _direction == PopoverDirection.bottom) {
       return _dxOffset(_direction, _horizontalOffset(size), size);
     } else {
       return _dyOffset(_direction, _verticalOffset(size), size);
@@ -60,10 +59,35 @@ final class PopoverPositionRenderObject extends RenderShiftedBox {
 
   @override
   void performLayout() {
+    // Prima faccio un layout per ottenere la dimensione preferita
     child!.layout(
       _additionalConstraints!.enforce(constraints),
       parentUsesSize: true,
     );
+
+    // Calcolo la direzione finale
+    final direction = PopoverUtils.popoverDirection(
+      attachRect,
+      child!.size,
+      arrowHeight,
+      _direction,
+    );
+
+    // Calcolo l'altezza disponibile per quella direzione
+    final availableHeight = _calculateAvailableHeight(direction);
+
+    // Se il child è troppo alto, rifaccio il layout con constraint limitato
+    if (child!.size.height > availableHeight) {
+      final adjustedConstraints = _additionalConstraints!.copyWith(
+        maxHeight: availableHeight,
+      );
+
+      child!.layout(
+        adjustedConstraints.enforce(constraints),
+        parentUsesSize: true,
+      );
+    }
+
     size = Size(constraints.maxWidth, constraints.maxHeight);
     final childParentData = child!.parentData as BoxParentData;
     childParentData.offset = calculateOffset(child!.size);
@@ -96,8 +120,7 @@ final class PopoverPositionRenderObject extends RenderShiftedBox {
   double _horizontalOffset(Size size) {
     var offset = 0.0;
 
-    if (attachRect.left > size.width / 2 &&
-        PopoverUtils.physicalSize.width - attachRect.right > size.width / 2) {
+    if (attachRect.left > size.width / 2 && PopoverUtils.physicalSize.width - attachRect.right > size.width / 2) {
       offset = attachRect.left + attachRect.width / 2 - size.width / 2;
     } else if (attachRect.left < size.width / 2) {
       offset = arrowHeight;
@@ -110,9 +133,7 @@ final class PopoverPositionRenderObject extends RenderShiftedBox {
   double _verticalOffset(Size size) {
     var offset = 0.0;
 
-    if (attachRect.top > size.height / 2 &&
-        PopoverUtils.physicalSize.height - attachRect.bottom >
-            size.height / 2) {
+    if (attachRect.top > size.height / 2 && PopoverUtils.physicalSize.height - attachRect.bottom > size.height / 2) {
       offset = attachRect.top + attachRect.height / 2 - size.height / 2;
     } else if (attachRect.top < size.height / 2) {
       offset = arrowHeight;
@@ -120,5 +141,25 @@ final class PopoverPositionRenderObject extends RenderShiftedBox {
       offset = PopoverUtils.physicalSize.height - arrowHeight - size.height;
     }
     return offset;
+  }
+
+  double _calculateAvailableHeight(PopoverDirection direction) {
+    final viewPadding = PopoverUtils.viewPadding;
+
+    switch (direction) {
+      case PopoverDirection.top:
+        return attachRect.top - arrowHeight - viewPadding.top;
+      case PopoverDirection.bottom:
+        return PopoverUtils.physicalSize.height -
+            attachRect.bottom -
+            arrowHeight -
+            viewPadding.bottom;
+      case PopoverDirection.left:
+      case PopoverDirection.right:
+        return PopoverUtils.physicalSize.height -
+            2 * arrowHeight -
+            viewPadding.top -
+            viewPadding.bottom;
+    }
   }
 }
