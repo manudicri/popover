@@ -83,7 +83,7 @@ class _PopoverItemState extends State<PopoverItem> {
             child: ClipRSuperellipse(
               borderRadius: BorderRadius.circular(widget.radius ?? 5),
               child: Material(
-                child: widget.child,
+                child: SingleChildScrollView(child: widget.child),
                 color: widget.backgroundColor,
               ),
             ),
