@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/rendering.dart';
 
 import 'popover_direction.dart';
@@ -56,13 +58,14 @@ final class PopoverPositionRenderObject extends RenderShiftedBox {
       return _dyOffset(_direction, _verticalOffset(size), size);
     }
   }
-
+  /*
   @override
   void performLayout() {
+    print('PopoverPositionRenderObject.performLayout() - child size before: ${child?.size}');
     // Prima faccio un layout per ottenere la dimensione preferita
     child!.layout(
       _additionalConstraints!.enforce(constraints),
-      parentUsesSize: true,
+      parentUsesSize: false,
     );
 
     // Calcolo la direzione finale
@@ -87,6 +90,36 @@ final class PopoverPositionRenderObject extends RenderShiftedBox {
         parentUsesSize: true,
       );
     }
+
+    size = Size(constraints.maxWidth, constraints.maxHeight);
+    final childParentData = child!.parentData as BoxParentData;
+    childParentData.offset = calculateOffset(child!.size);
+
+    print('PopoverPositionRenderObject.performLayout() - child size after: ${child?.size}');
+  }*/
+
+  @override
+  void performLayout() {
+    // Calcola la direzione stimata senza fare layout
+    final estimatedDirection = PopoverUtils.popoverDirection(
+      attachRect,
+      Size(constraints.maxWidth, constraints.maxHeight),
+      arrowHeight,
+      _direction,
+    );
+
+    // Calcola l'altezza disponibile subito
+    final availableHeight = _calculateAvailableHeight(estimatedDirection);
+
+    // UN SOLO LAYOUT con i constraints giusti
+    final finalConstraints = _additionalConstraints!.copyWith(
+      maxHeight: math.min(_additionalConstraints!.maxHeight, availableHeight),
+    );
+
+    child!.layout(
+      finalConstraints.enforce(constraints),
+      parentUsesSize: true,
+    );
 
     size = Size(constraints.maxWidth, constraints.maxHeight);
     final childParentData = child!.parentData as BoxParentData;
@@ -150,16 +183,10 @@ final class PopoverPositionRenderObject extends RenderShiftedBox {
       case PopoverDirection.top:
         return attachRect.top - arrowHeight - viewPadding.top;
       case PopoverDirection.bottom:
-        return PopoverUtils.physicalSize.height -
-            attachRect.bottom -
-            arrowHeight -
-            viewPadding.bottom;
+        return PopoverUtils.physicalSize.height - attachRect.bottom - arrowHeight - viewPadding.bottom;
       case PopoverDirection.left:
       case PopoverDirection.right:
-        return PopoverUtils.physicalSize.height -
-            2 * arrowHeight -
-            viewPadding.top -
-            viewPadding.bottom;
+        return PopoverUtils.physicalSize.height - 2 * arrowHeight - viewPadding.top - viewPadding.bottom;
     }
   }
 }
