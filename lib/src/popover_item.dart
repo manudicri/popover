@@ -113,8 +113,6 @@ class _PopoverItemState extends State<PopoverItem> {
     final size = MediaQuery.of(context).size;
     var constraints = BoxConstraints.loose(size);
 
-    debugPrint("constrainting");
-
     if (widget.constraints != null) {
       constraints = constraints.copyWith(
         minWidth: widget.constraints!.minWidth.isFinite ? widget.constraints!.minWidth : null,

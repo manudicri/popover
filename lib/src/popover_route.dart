@@ -6,6 +6,7 @@ class PopoverRoute<T> extends RawDialogRoute<T> {
 
   /// The duration for the reverse transition animation.
   final Duration? _reverseTransitionDuration;
+  bool _workaroundComplete = false;
 
   PopoverRoute({
     required super.pageBuilder,
@@ -19,7 +20,14 @@ class PopoverRoute<T> extends RawDialogRoute<T> {
     super.traversalEdgeBehavior,
     Duration? reverseTransitionDuration,
     this.allowClicksOnBackground = false,
-  }) : _reverseTransitionDuration = reverseTransitionDuration;
+  }) : _reverseTransitionDuration = reverseTransitionDuration {
+    // Schedule barrier rebuild after workaround period
+    // workaround for https://github.com/flutter/flutter/issues/177992
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _workaroundComplete = true;
+      changedInternalState(); // This forces the barrier to rebuild
+    });
+  }
 
   @override
   Duration get reverseTransitionDuration => _reverseTransitionDuration ?? super.reverseTransitionDuration;
@@ -30,5 +38,14 @@ class PopoverRoute<T> extends RawDialogRoute<T> {
       ignoring: allowClicksOnBackground,
       child: super.buildModalBarrier(),
     );
+  }
+
+  @override
+  bool get barrierDismissible {
+    // workaround for https://github.com/flutter/flutter/issues/177992
+    if (!_workaroundComplete) {
+      return false;
+    }
+    return super.barrierDismissible;
   }
 }
